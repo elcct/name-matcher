@@ -17,7 +17,7 @@ func TestFCMatcherSameNames(t *testing.T) {
 
 	result, err := fc.Match(original, original)
 	assert.Nil(t, err)
-	assert.Equal(t, result, 1.0)
+	assert.Equal(t, 1.0, result)
 }
 
 func TestFCMatcherSimilarNames(t *testing.T) {
@@ -38,6 +38,6 @@ func TestFCMatcherSimilarNames(t *testing.T) {
 	for key := range tests {
 		result, err := fc.Match(original, key)
 		assert.Nil(t, err)
-		assert.Equal(t, result, tests[key])
+		assert.Equal(t, tests[key], result)
 	}
 }
