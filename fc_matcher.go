@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 // FCMatcher trying to match two football club names and tells their similarity
 // It implements Matcher interface
 type FCMatcher struct {
@@ -9,7 +13,13 @@ type FCMatcher struct {
 // similar = 1.0 means total match
 // similar = 0.0 means no match at all
 func (fcm *FCMatcher) Match(original string, alternative string) (similarity float64, err error) {
-	if original == alternative {
+	o := cleanString(original)
+	a := expandString(alternative)
+	a = cleanString(a)
+
+	fmt.Println(a)
+
+	if o == a {
 		return 1.0, nil
 	}
 
@@ -36,7 +46,7 @@ var tests = map[string]float64{
 To calculate similarity score of Football Team name, we will use couple of
 strategies:
 1) We clean both input strings
-2) We drop "Football Club", "FC", "F.C."
+2) We drop "Football Club", "FC", "F.C." (???)
 3) Baseline will be number of words in football team name
 4) Next we expand alternative string by capital letter as if it was separate word
 5) We match unmatched words by how much of alternative word is in original
