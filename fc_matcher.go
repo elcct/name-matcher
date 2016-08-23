@@ -19,7 +19,7 @@ strategies:
 - Next we expand alternative string by capital letter as if it was separate word
   For example: ABeC becomes A Be C
 
-- We iterate over original words and checking much of alternative word is
+- We iterate over original words and checking how much of alternative word is
   in its original counterpart
     B - Bromwich, that is 1/8
     If we have partial match, we can assume it is abbreviation of the word
