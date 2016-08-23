@@ -10,6 +10,7 @@ Algorithm draft
 
 To calculate similarity score of Football Team name, we will use couple of
 strategies:
+
 - We clean both input strings
 
 - We assume that order of words in alternative name is the same as in original.
@@ -25,10 +26,10 @@ strategies:
     We fit the weight to the range of 1.0>=weight>=0.5
     If there is no match then we put give 0 weight
 
- - We calculate the similarity as sum of weights divided by number
-   of match attemtps performed
+- We calculate the similarity as sum of weights divided by number
+   of match attempts performed
 
-  - If resulting similarity is >=0.5 we can assume we have a likely match
+- If resulting similarity is >=0.5 we can assume we have a likely match
     If similarity is 1.0 then it is a perfect match
     If similarity is <0.5 then match is unlikely
     If similarity is 0.0 then for sure there is no match
