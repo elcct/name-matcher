@@ -1,8 +1,38 @@
 package main
 
 import (
-	"fmt"
+	//	"fmt"
+	"strings"
 )
+
+/*
+Algorithm draft
+
+To calculate similarity score of Football Team name, we will use couple of
+strategies:
+- We clean both input strings
+
+- We assume that order of words in alternative name is the same as in original.
+  For example alternative to West Bromwich will not be Bromwich West
+
+- Next we expand alternative string by capital letter as if it was separate word
+  For example: ABeC becomes A Be C
+
+- We iterate over original words and checking much of alternative word is
+  in its original counterpart
+    B - Bromwich, that is 1/8
+    If we have partial match, we can assume it is abbreviation of the word
+    We fit the weight to the range of 1.0>=weight>=0.5
+    If there is no match then we put give 0 weight
+
+ - We calculate the similarity as sum of weights divided by number
+   of match attemtps performed
+
+  - If resulting similarity is >=0.5 we can assume we have a likely match
+    If similarity is 1.0 then it is a perfect match
+    If similarity is <0.5 then match is unlikely
+    If similarity is 0.0 then for sure there is no match
+*/
 
 // FCMatcher trying to match two football club names and tells their similarity
 // It implements Matcher interface
@@ -10,49 +40,39 @@ type FCMatcher struct {
 }
 
 // Match matches original to alternative and returns the similarity factor
-// similar = 1.0 means total match
-// similar = 0.0 means no match at all
+// similarity = 1.0 means total match
+// similarity >= means likely match
+// similarity = 0.0 means no match at all
 func (fcm *FCMatcher) Match(original string, alternative string) (similarity float64, err error) {
 	o := cleanString(original)
 	a := expandString(alternative)
 	a = cleanString(a)
 
-	fmt.Println(a)
-
 	if o == a {
 		return 1.0, nil
 	}
 
+	po := strings.Fields(o)
+	pa := strings.Fields(a)
+
+	matches := 0
+	weights := 0.0
+
+	for i, token := range po {
+		if i == len(pa) {
+			break
+		}
+		if strings.HasPrefix(token, pa[i]) {
+			weights += 0.5 + (float64(len(pa[i]))/float64(len(token)))*0.5
+		}
+		matches++
+	}
+
+	if matches == 0 {
+		return 0.0, nil
+	}
+
+	similarity = weights / float64(matches)
+
 	return
 }
-
-/*
-
-// Weights are just arbitrary, will change once implementation is ready
-
-original := "West Bromwich Albion Football Club"
-
-var tests = map[string]float64{
-  "West Bromwich Albion":      0.9,
-  "West Bromwich Albion FC":   0.9,
-  "West Bromwich Albion F.C.": 0.9,
-  "West Bromwich FC":          0.9,
-  "West Bromwich":             0.9,
-  "WBA FC":                    0.6,
-  "WB Albion":                 0.6,
-  "West Brom":                 0.6,
-}
-
-To calculate similarity score of Football Team name, we will use couple of
-strategies:
-1) We clean both input strings
-2) We drop "Football Club", "FC", "F.C." (???)
-3) Baseline will be number of words in football team name
-4) Next we expand alternative string by capital letter as if it was separate word
-5) We match unmatched words by how much of alternative word is in original
-    B - Bromwich, that is 1/8
-    we need to shift the result a bit, so that 1/8 will be 0.5 and 8/8 will be 1.0
-    0.5 + (1/8)/2
-    if there is no match then we put 0
-
-*/
