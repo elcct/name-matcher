@@ -24,7 +24,7 @@ strategies:
     B - Bromwich, that is 1/8
     If we have partial match, we can assume it is abbreviation of the word
     We fit the weight to the range of 1.0>=weight>=0.5
-    If there is no match then we put give 0 weight
+    If there is no match then we put 0 weight
 
 - We calculate the similarity as sum of weights divided by number
    of match attempts performed
